@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 [Serializable]
-[PostProcess(typeof(OldMonitorRenderer), PostProcessEvent.AfterStack, "JfranMora/OldMonitor")]
+[PostProcess(typeof(OldMonitorRenderer), PostProcessEvent.AfterStack, "JfranMora/OldMonitor", false)]
 public class OldMonitor : PostProcessEffectSettings
 {
     [Header("Monitor")] 
