@@ -33,12 +33,18 @@ MonoBehaviour:
   monitorBend:
     overrideState: 1
     value: 2
-  slowscanIntensity:
+  slowscanWidth:
     overrideState: 1
-    value: 0.1
+    value: 0.05
+  slowscanSpeed:
+    overrideState: 1
+    value: 1
   slowscanDistortion:
     overrideState: 1
     value: 0.5
+  slowscanIntensity:
+    overrideState: 1
+    value: 0.25
   scanline:
     overrideState: 1
     value: 600

@@ -7,8 +7,13 @@ Shader "Hidden/JfranMora/Scanlines"
     
     TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
     float _MonitorBend;
-    float _SlowscanDistortion;      // 0 - .025
-    float _SlowscanIntensity;       // 0 - .1  
+    
+    // x -> _SlowscanWidth
+    // y -> _SlowscanSpeed
+    // z -> _SlowscanDistortion
+    // w -> _SlowscanIntensity
+    float4 _SlowscanSettings;
+    
     float _Scanline;
     float _ScanlineSpeed;    
 
@@ -19,9 +24,9 @@ Shader "Hidden/JfranMora/Scanlines"
 
     float slowscan(float2 uv) 
     {
-        float r = sin(1 * uv.y * 3.1415 + _Time.y * 1.0);      // -1 --> 1
-        r = clamp(r, .95, 1);
-        r = remap(r, .95, 1, 0, 1);
+        float r = cos(uv.y * 3.1415 + _Time.y * _SlowscanSettings.y);      // -1 --> 1
+        r = clamp(r, 1 - _SlowscanSettings.x, 1);
+        r = remap(r, 1 - _SlowscanSettings.x, 1, 0, 1);
         r = r*r*r*r*r;
         return r;
     }
@@ -44,7 +49,7 @@ Shader "Hidden/JfranMora/Scanlines"
     
     float2 scandistort(float2 uv) 
     {
-        return float2(uv.x - slowscan(uv) * _SlowscanDistortion, uv.y);
+        return float2(uv.x - slowscan(uv) * _SlowscanSettings.z, uv.y);
     }
     
     float4 frag(VaryingsDefault i) : SV_Target
@@ -61,7 +66,7 @@ Shader "Hidden/JfranMora/Scanlines"
         float4 scanline_color = float4(scanline(sd_uv), scanline(sd_uv), scanline(sd_uv), scanline(sd_uv));
         
         float4 result = lerp(color, color * scanline_color, .1f);
-        result += float4(_SlowscanIntensity, _SlowscanIntensity, _SlowscanIntensity, _SlowscanIntensity) * slowscan(uv);  
+        result += _SlowscanSettings.w * float4(1,1,1,1) * slowscan(uv);  
         return result;
     }
 	
